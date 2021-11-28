@@ -12,7 +12,7 @@ class HitDetailMapper @Inject constructor() : UiMapper<HitDetail, Hit> {
             id = domainModel.id,
             image = domainModel.largeImageURL ?: "",
             name = domainModel.user ?: "",
-            tagList = domainModel.tags ?: "",
+            tagList = domainModel.tags ?: emptyList(),
             likes = domainModel.likes ?: 0,
             downloads = domainModel.downloads ?: 0,
             comments = domainModel.comments ?: 0

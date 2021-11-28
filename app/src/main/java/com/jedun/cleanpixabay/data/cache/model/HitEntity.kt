@@ -12,6 +12,5 @@ data class HitEntity(
     val likes: Int? = null,
     val downloads: Int? = null,
     val comments: Int? = null,
-    val tags: String? = null,
     var query: String? = null
 )

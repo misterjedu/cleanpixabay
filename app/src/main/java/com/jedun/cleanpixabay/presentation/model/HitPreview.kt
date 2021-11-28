@@ -4,5 +4,5 @@ data class HitPreview(
     var id: Int,
     var thumbNail: String,
     var name: String,
-    var tagList: String
+    var tagList: List<String>
 )

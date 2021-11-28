@@ -31,7 +31,7 @@ class SearchImageUseCase @Inject constructor(
                             Resource.Error("No results found in cache")
                         } else {
                             Resource.Success(it.data.map { hitEntity ->
-                                entityMapper.mapFromEntity(hitEntity)
+                                entityMapper.mapToDomain(hitEntity)
                             })
                         }
                     }

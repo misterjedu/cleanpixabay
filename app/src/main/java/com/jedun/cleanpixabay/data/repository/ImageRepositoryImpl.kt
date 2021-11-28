@@ -1,8 +1,8 @@
 package com.jedun.cleanpixabay.data.repository
 
-import com.jedun.cleanpixabay.data.cache.database.ImageDao
+import com.jedun.cleanpixabay.data.cache.Cache
 import com.jedun.cleanpixabay.data.cache.mapper.CacheMapper
-import com.jedun.cleanpixabay.data.cache.model.HitEntity
+import com.jedun.cleanpixabay.data.cache.model.HitsWithTag
 import com.jedun.cleanpixabay.data.network.PixaBayApi
 import com.jedun.cleanpixabay.data.network.model.ImageDto
 import com.jedun.cleanpixabay.domain.model.PixabayRequest
@@ -16,12 +16,12 @@ import javax.inject.Inject
 
 class ImageRepositoryImpl @Inject constructor(
     private val pixaBayApi: PixaBayApi,
-    private val imageDao: ImageDao,
+    private val cache: Cache,
     var entityMapper: CacheMapper
 ) : ImageRepository {
 
     override fun searchImages(pixabayRequest: PixabayRequest):
-            Observable<Resource<List<HitEntity>>> {
+            Observable<Resource<List<HitsWithTag>>> {
 
         pixaBayApi.retrievePhotos(query = pixabayRequest.query, page = pixabayRequest.page)
             .subscribeOn(Schedulers.io())
@@ -29,12 +29,12 @@ class ImageRepositoryImpl @Inject constructor(
                 override fun onSubscribe(d: Disposable) {}
                 override fun onSuccess(imageDto: ImageDto) {
                     imageDto.hits?.map {
-                        entityMapper.mapToEntityWithQuery(
+                        entityMapper.mapToCache(
                             it,
                             pixabayRequest.query
                         )
                     }
-                        ?.let { imageDao.insertImages(it) }
+                        ?.let { cache.insertImages(it) }
                 }
 
                 override fun onError(e: Throwable) {
@@ -42,15 +42,15 @@ class ImageRepositoryImpl @Inject constructor(
                 }
             })
 
-        return imageDao.getImages(pixabayRequest.query, pixabayRequest.page)
+        return cache.getImages(pixabayRequest.query, pixabayRequest.page)
             .toObservable()
-            .map { hitEntity ->
+            .map { hitWithTag ->
                 try {
-                    Resource.Success(hitEntity)
+                    println("Image Repository" + hitWithTag)
+                    Resource.Success(hitWithTag)
                 } catch (t: Throwable) {
                     t.message?.let { Resource.Error(it) }
                 }
             }
-
     }
 }

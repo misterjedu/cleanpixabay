@@ -8,7 +8,7 @@ data class HitDetail(
     var id: Int,
     var image: String,
     var name: String,
-    var tagList: String,
+    var tagList: List<String>,
     var likes: Int,
     var downloads: Int,
     var comments: Int

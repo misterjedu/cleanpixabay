@@ -8,5 +8,5 @@ data class Hit(
     val likes: Int? = null,
     val downloads: Int? = null,
     val comments: Int? = null,
-    val tags: String? = null,
+    val tags: List<String>? = null,
 )

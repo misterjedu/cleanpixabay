@@ -1,5 +1,6 @@
 package com.jedun.cleanpixabay.di
 
+import com.jedun.cleanpixabay.data.cache.Cache
 import com.jedun.cleanpixabay.data.repository.ImageRepositoryImpl
 import com.jedun.cleanpixabay.data.cache.database.ImageDao
 import com.jedun.cleanpixabay.data.cache.database.PixaBayImageDatabase
@@ -27,11 +28,11 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideImageRepository(
-        pixaBayApi: PixaBayApi, imageDao: ImageDao, cacheMapper: CacheMapper
+        pixaBayApi: PixaBayApi, cache: Cache, cacheMapper: CacheMapper
     ): ImageRepository {
         return ImageRepositoryImpl(
             pixaBayApi,
-            imageDao,
+            cache,
             cacheMapper
         )
     }

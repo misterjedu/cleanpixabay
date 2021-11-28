@@ -37,7 +37,7 @@ class ImageDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.hitDetail = hitDetail
-        hitDetail.tagList.split(",").forEach { addChip(it.trim()) }
+        hitDetail.tagList.forEach { addChip(it.trim()) }
     }
 
     private fun addChip(text: String) {

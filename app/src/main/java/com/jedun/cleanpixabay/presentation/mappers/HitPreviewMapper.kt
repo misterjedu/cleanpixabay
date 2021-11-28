@@ -12,7 +12,7 @@ class HitPreviewMapper @Inject constructor() : UiMapper<HitPreview, Hit> {
             id = domainModel.id,
             thumbNail = domainModel.previewURL ?: "",
             name = domainModel.user ?: "",
-            tagList = domainModel.tags ?: ""
+            tagList = domainModel.tags ?: emptyList()
 
         )
     }

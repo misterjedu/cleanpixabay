@@ -1,28 +1,22 @@
 package com.jedun.cleanpixabay.data.cache.mapper
 
 import com.jedun.cleanpixabay.data.cache.model.HitEntity
+import com.jedun.cleanpixabay.data.cache.model.HitsWithTag
+import com.jedun.cleanpixabay.data.cache.model.TagEntity
 import com.jedun.cleanpixabay.data.network.model.HitDto
-import com.jedun.cleanpixabay.domain.util.EntityMapper
+import com.jedun.cleanpixabay.data.util.iCacheMapper
 import javax.inject.Inject
 
-class CacheMapper @Inject constructor() : EntityMapper<HitEntity, HitDto> {
+class CacheMapper @Inject constructor() : iCacheMapper<HitDto, HitsWithTag> {
 
-    override fun mapFromEntity(entity: HitEntity): HitDto {
-        return HitDto(
-            id = entity.id,
-            previewURL = entity.previewURL,
-            largeImageURL = entity.largeImageURL,
-            user = entity.user,
-            likes = entity.likes,
-            downloads = entity.downloads,
-            comments = entity.comments,
-            tags = entity.tags
+    override fun mapToCache(dto: HitDto, query: String): HitsWithTag {
+        return HitsWithTag(
+            mapHitEntity(dto, query),
+            dto.tags?.split(",")?.map { TagEntity(it) }.orEmpty()
         )
-
     }
 
-    override fun mapToEntity(dto: HitDto): HitEntity {
-
+    private fun mapHitEntity(dto: HitDto, query: String): HitEntity {
         return HitEntity(
             id = dto.id,
             previewURL = dto.previewURL,
@@ -31,20 +25,6 @@ class CacheMapper @Inject constructor() : EntityMapper<HitEntity, HitDto> {
             likes = dto.likes,
             downloads = dto.downloads,
             comments = dto.comments,
-            tags = dto.tags,
-        )
-    }
-
-    fun mapToEntityWithQuery(dto: HitDto, query: String): HitEntity {
-        return HitEntity(
-            id = dto.id,
-            previewURL = dto.previewURL,
-            largeImageURL = dto.largeImageURL,
-            user = dto.user,
-            likes = dto.likes,
-            downloads = dto.downloads,
-            comments = dto.comments,
-            tags = dto.tags,
             query = query
         )
     }

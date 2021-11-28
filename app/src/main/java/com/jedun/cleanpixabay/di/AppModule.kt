@@ -2,9 +2,12 @@ package com.jedun.cleanpixabay.di
 
 import android.content.Context
 import androidx.room.Room
+import com.jedun.cleanpixabay.data.cache.Cache
+import com.jedun.cleanpixabay.data.cache.RoomCache
 import com.jedun.cleanpixabay.data.cache.database.PixaBayImageDatabase
 import com.jedun.cleanpixabay.data.network.NetworkConstants
 import com.jedun.cleanpixabay.data.network.PixaBayApi
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,61 +24,68 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+abstract class AppModule {
 
-    @Provides
-    @Singleton
-    fun providePixaBayDatabase(@ApplicationContext context: Context): PixaBayImageDatabase {
-        return Room.databaseBuilder(
-            context,
-            PixaBayImageDatabase::class.java,
-            PixaBayImageDatabase.DATABASE_NAME
-        ).fallbackToDestructiveMigration().build()
-    }
+    @Binds
+    abstract fun bindCache(cache: RoomCache): Cache
 
-    @Provides
-    @Singleton
-    fun provideLogger(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
+    companion object {
 
-    @Provides
-    @Singleton
-    fun provideClient(
-        logger: HttpLoggingInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30L, TimeUnit.SECONDS)
-            .readTimeout(30L, TimeUnit.SECONDS)
-            .writeTimeout(30L, TimeUnit.SECONDS)
-            .addInterceptor(logger)
-            .build()
-    }
+        @Provides
+        @Singleton
+        fun providePixaBayDatabase(@ApplicationContext context: Context): PixaBayImageDatabase {
+            return Room.databaseBuilder(
+                context,
+                PixaBayImageDatabase::class.java,
+                PixaBayImageDatabase.DATABASE_NAME
+            ).fallbackToDestructiveMigration().build()
+        }
 
-    @Provides
-    @Singleton
-    fun provideConverterFactory(): Converter.Factory {
-        return GsonConverterFactory.create()
-    }
 
-    @Provides
-    @Singleton
-    fun provideRetrofitClient(
-        client: OkHttpClient,
-        converterFactory: Converter.Factory
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(NetworkConstants.BASEURL)
-            .addConverterFactory(converterFactory)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(client)
-            .build()
-    }
+        @Provides
+        @Singleton
+        fun provideLogger(): HttpLoggingInterceptor {
+            return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
 
-    @Provides
-    @Singleton
-    fun providePixaBayService(retrofit: Retrofit): PixaBayApi {
-        return retrofit.create(PixaBayApi::class.java)
+        @Provides
+        @Singleton
+        fun provideClient(
+            logger: HttpLoggingInterceptor
+        ): OkHttpClient {
+            return OkHttpClient.Builder()
+                .connectTimeout(30L, TimeUnit.SECONDS)
+                .readTimeout(30L, TimeUnit.SECONDS)
+                .writeTimeout(30L, TimeUnit.SECONDS)
+                .addInterceptor(logger)
+                .build()
+        }
+
+        @Provides
+        @Singleton
+        fun provideConverterFactory(): Converter.Factory {
+            return GsonConverterFactory.create()
+        }
+
+        @Provides
+        @Singleton
+        fun provideRetrofitClient(
+            client: OkHttpClient,
+            converterFactory: Converter.Factory
+        ): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl(NetworkConstants.BASEURL)
+                .addConverterFactory(converterFactory)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(client)
+                .build()
+        }
+
+        @Provides
+        @Singleton
+        fun providePixaBayService(retrofit: Retrofit): PixaBayApi {
+            return retrofit.create(PixaBayApi::class.java)
+        }
     }
 
 }

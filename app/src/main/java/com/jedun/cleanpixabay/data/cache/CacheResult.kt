@@ -7,4 +7,5 @@ sealed class CacheResult<out T> {
     data class GenericError(
         val errorMessage: String? = null
     ): CacheResult<Nothing>()
+
 }

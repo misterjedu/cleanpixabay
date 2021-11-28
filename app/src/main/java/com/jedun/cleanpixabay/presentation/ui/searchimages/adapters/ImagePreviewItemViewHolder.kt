@@ -26,7 +26,7 @@ class ImagePreviewItemViewHolder(private val binding: ItemPixabayImagesBinding) 
         }
 
         chipGroup.removeAllViews()
-        hitPreview.tagList.split(",").forEach { addChip(it.trim()) }
+        hitPreview.tagList.forEach { addChip(it.trim()) }
     }
 
     private fun addChip(text: String) {
