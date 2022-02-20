@@ -61,7 +61,7 @@ dependencies {
     // Coroutines dependencies
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlinxCoroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlinxCoroutines"
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycleViewmodelKtx"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycleViewmodelKtx"
 
 
     implementation "androidx.room:room-runtime:$versions.roomVersion"

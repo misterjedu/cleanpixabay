@@ -1,6 +1,5 @@
 package com.jedun.cleanpixabay.data.network
 
-import com.jedun.cleanpixabay.data.network.NetworkConstants
 import com.jedun.cleanpixabay.data.network.model.ImageDto
 import com.jedun.cleanpixabay.utils.IMAGE_TYPE
 import io.reactivex.Single

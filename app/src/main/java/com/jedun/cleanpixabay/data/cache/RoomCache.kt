@@ -5,6 +5,7 @@ import com.jedun.cleanpixabay.data.cache.model.HitsWithTag
 import io.reactivex.Flowable
 import javax.inject.Inject
 
+
 class RoomCache @Inject constructor(private val imageDao: ImageDao) : Cache {
 
     override fun insertImages(images: List<HitsWithTag>) {
